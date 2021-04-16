@@ -12,4 +12,10 @@ interface AuthorizationRepository
     public function getOneByAuthorizerAppId(string $authorizerAppId): Authorization;
 
     public function save(Authorization $authorization);
+
+    public function update(
+        string $authorizerAccessToken,
+        int $expiresIn,
+        string $authorizerRefreshToken
+    ): Authorization;
 }

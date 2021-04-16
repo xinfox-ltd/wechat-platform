@@ -242,7 +242,6 @@ class WechatPlatform
             // 刷新token
             // TODO 如果高并发需要另外处理
             $authorization = $this->refreshAuthorizerToken($authorizerAppId, $authorization->getRefreshToken());
-            $this->authorizationRepository->save($authorization);
         }
 
         return $authorization;
@@ -278,9 +277,11 @@ class WechatPlatform
             HttpClient::getInstance()
                 ->post($uri, $data)
         );
-        $this->authorizationRepository->save($authorization);
-
-        return $authorization;
+        return $this->authorizationRepository->update(
+            $authorization['authorizer_access_token'],
+            (int)$authorization['expires_in'],
+            $authorization['authorizer_refresh_token']
+        );
     }
 
     /**

@@ -47,7 +47,7 @@ class Authorization
      */
     public function getExpireTime(): int
     {
-        return $this->data['authorizer_appid'];
+        return time() + $this->data['expires_in'] ?? 0;
     }
 
     public function getFuncInfo(): array
