@@ -1,10 +1,10 @@
 <?php
 
-namespace XinFox\WechatPlatform\Miniprogram;
+namespace XinFox\WechatPlatform\MiniProgram;
 
 use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
 use XinFox\WechatPlatform\Exception;
-use XinFox\WechatPlatform\Http;
+use XinFox\WechatPlatform\HttpClient;
 
 class Config
 {
@@ -33,7 +33,7 @@ class Config
 
         $data = array_merge($data, $domain);
 
-        $data = Http::getInstance()
+        $data = HttpClient::getInstance()
             ->post($api, $data);
 
         return $data;
@@ -56,7 +56,7 @@ class Config
             'requestdomain' => $requestDomain,
         ];
 
-        $data = Http::getInstance()
+        $data = HttpClient::getInstance()
             ->post($api, $data);
 
         return $data;

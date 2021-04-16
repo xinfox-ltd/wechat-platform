@@ -1,15 +1,15 @@
 <?php
 
-namespace XinFox\WechatPlatform\Miniprogram;
+namespace XinFox\WechatPlatform\MiniProgram;
 
 use GuzzleHttp\Client;
 use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
 use XinFox\WechatPlatform\Exception;
-use XinFox\WechatPlatform\Http;
+use XinFox\WechatPlatform\HttpClient;
 
 /**
  * 代码管理
- * @package XinFox\WechatPlatform\Miniprogram
+ * @package XinFox\WechatPlatform\MiniProgram
  */
 class Code
 {
@@ -28,7 +28,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/commit?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -75,7 +75,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/get_category?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -95,7 +95,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/get_page?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -117,7 +117,7 @@ class Code
         $api = "https://api.weixin.qq.com/wxa/submit_audit?access_token={$token}";
 
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -141,7 +141,7 @@ class Code
             'auditid' => $auditid
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -161,7 +161,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/get_latest_auditstatus?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -181,7 +181,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/undocodeaudit?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -201,7 +201,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/release?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, "{}");
 
         return $resultData;
@@ -225,7 +225,7 @@ class Code
             'gray_percentage' => $grayRercentage,
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -245,7 +245,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/getgrayreleaseplan?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -265,7 +265,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/revertgrayrelease?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -289,7 +289,7 @@ class Code
             'action' => $action == 'close' ? 'close' : 'open'
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -309,7 +309,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/wxa/revertcoderelease?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -331,7 +331,7 @@ class Code
         $api = "https://api.weixin.qq.com/wxa/getweappsupportversion?access_token={$token}";
         $data = [];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -355,7 +355,7 @@ class Code
             'version' => $version
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -386,7 +386,7 @@ class Code
             "is_edit" => 0
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -406,7 +406,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/cgi-bin/wxopen/qrcodejumpget?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, []);
 
         return $resultData;
@@ -426,7 +426,7 @@ class Code
 
         $api = "https://api.weixin.qq.com/cgi-bin/wxopen/qrcodejumpdownload?access_token={$token}";
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, []);
 
         return $resultData;
@@ -450,7 +450,7 @@ class Code
             'prefix' => $prefix
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -474,7 +474,7 @@ class Code
             'prefix' => $prefix
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;

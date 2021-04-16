@@ -9,7 +9,7 @@ namespace XinFox\WechatPlatform\Exception;
 
 use Throwable;
 
-class AuthorizationNotExistException extends Exception
+class AuthorizationNotExistException extends WechatPlatformException
 {
     public function __construct($message = "微信授权信息不存在，请重新授权", $code = 0, Throwable $previous = null)
     {

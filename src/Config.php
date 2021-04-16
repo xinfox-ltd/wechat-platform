@@ -7,22 +7,22 @@ declare(strict_types=1);
 
 namespace XinFox\WechatPlatform;
 
-use http\Exception\InvalidArgumentException;
+use XinFox\WechatPlatform\Exception\InvalidArgumentException;
 
 class Config
 {
-    private string $appId;
+    private array $config;
 
-    private string $appSecret;
-
+    /**
+     * @throws InvalidArgumentException
+     */
     public function __construct(array $config)
     {
-        if (empty($config['app_id']) || empty($config['app_secret'])) {
-            throw new \XinFox\Exception\InvalidArgumentException('缺少参数');
+        if (empty($config['app_id']) || empty($config['app_secret']) || empty($config['token']) || empty($config['encrypt_key'])) {
+            throw new InvalidArgumentException('缺少参数');
         }
 
-        $this->appId = $config['app_id'];
-        $this->appSecret = $config['app_secret'];
+        $this->config = $config;
     }
 
     /**
@@ -30,7 +30,7 @@ class Config
      */
     public function getAppId(): string
     {
-        return $this->appId;
+        return $this->config['app_id'];
     }
 
     /**
@@ -38,6 +38,16 @@ class Config
      */
     public function getAppSecret(): string
     {
-        return $this->appSecret;
+        return $this->config['app_secret'];
+    }
+
+    public function getToken(): string
+    {
+        return $this->config['token'];
+    }
+
+    public function getEncryptKey(): string
+    {
+        return $this->config['encrypt_key'];
     }
 }

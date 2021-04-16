@@ -1,10 +1,10 @@
 <?php
 
-namespace XinFox\WechatPlatform\Miniprogram;
+namespace XinFox\WechatPlatform\MiniProgram;
 
 use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
 use XinFox\WechatPlatform\Exception;
-use XinFox\WechatPlatform\Http;
+use XinFox\WechatPlatform\HttpClient;
 
 class CodeTemplate
 {
@@ -20,7 +20,7 @@ class CodeTemplate
             ->getComponentAccessToken();
 
         $api = "https://api.weixin.qq.com/wxa/gettemplatedraftlist?access_token={$componentAccessToken}";
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -39,7 +39,7 @@ class CodeTemplate
             ->getComponentAccessToken();
 
         $api = "https://api.weixin.qq.com/wxa/gettemplatelist?access_token={$componentAccessToken}";
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->get($api);
 
         return $resultData;
@@ -63,7 +63,7 @@ class CodeTemplate
             'draft_id' => $draftId
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;
@@ -87,7 +87,7 @@ class CodeTemplate
             'template_id' => $templateId
         ];
 
-        $resultData = Http::getInstance()
+        $resultData = HttpClient::getInstance()
             ->post($api, $data);
 
         return $resultData;

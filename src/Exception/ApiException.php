@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace XinFox\WechatPlatform;
+namespace XinFox\WechatPlatform\Exception;
 
-interface WechatRepository
+class ApiException extends WechatPlatformException
 {
 
 }

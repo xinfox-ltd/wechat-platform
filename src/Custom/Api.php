@@ -5,7 +5,7 @@ namespace XinFox\WechatPlatform\Custom;
 use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
 use XinFox\WechatPlatform\Custom\Message\MessageInterface;
 use XinFox\WechatPlatform\Exception;
-use XinFox\WechatPlatform\Http;
+use XinFox\WechatPlatform\HttpClient;
 
 class Api
 {
@@ -32,7 +32,7 @@ class Api
             ->getAuthorizerAccessToken($this->authorizerAppid);
 
         $uri = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$accessToken}";
-        return Http::getInstance()
+        return HttpClient::getInstance()
             ->post($uri, $message->toArray());
     }
 }

@@ -2,7 +2,7 @@
 
 namespace XinFox\WechatPlatform\Exception;
 
-class Exception extends \Exception
+class WechatPlatformException extends \Exception
 {
 
 }

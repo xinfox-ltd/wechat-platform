@@ -8,7 +8,7 @@ class Prpcrypt
 {
     public $key;
 
-    function __construct($key)
+    function __construct(string $key)
     {
         $this->key = base64_decode($key . "=");
     }
@@ -23,7 +23,7 @@ class Prpcrypt
     public function encrypt(string $plaintext, string $appId): string
     {
         // 获得16位随机字符串，填充到明文之前
-        $random = $this->randomStr(16);
+        $random = Util::randomStr(16);
         $plaintext = $random . pack("N", strlen($plaintext)) . $plaintext . $appId;
 
         $iv = substr($this->key, 0, 16);
@@ -68,23 +68,5 @@ class Prpcrypt
 
         $lenList = unpack("N", substr($plaintext, 0, 4));
         return substr($plaintext, 4, $lenList[1]);
-    }
-
-    /**
-     * @param $length
-     * @return string
-     */
-    protected function randomStr($length): string
-    {
-        //字符组合
-        $str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $len = strlen($str) - 1;
-        $randStr = '';
-        for ($i = 0; $i < $length; $i++) {
-            $num = mt_rand(0, $len);
-            $randStr .= $str[$num];
-        }
-
-        return $randStr;
     }
 }

@@ -2,21 +2,19 @@
 
 namespace XinFox\WechatPlatform;
 
-use Phalcon\Text;
-
 class Crypt
 {
-    private $token;
-    private $encodingAesKey;
-    private $appId;
+    private string $token;
+    private string $appId;
 
-    public function __construct()
+    private Prpcrypt $prpcrypt;
+
+    public function __construct(string $appId, string $token, string $encryptKey)
     {
-        $config = container('config')->path('vendor.weixin.platform');
+        $this->token = $token; // 公众平台上，开发者设置的token
+        $this->appId = $appId; // 公众平台的appId
 
-        $this->token = $config->token; // 公众平台上，开发者设置的token
-        $this->encodingAesKey = $config->encodingAesKey; // 公众平台上，开发者设置的EncodingAESKey
-        $this->appId = $config->appid; // 公众平台的appId
+        $this->prpcrypt = new Prpcrypt($encryptKey);
     }
 
     /**
@@ -34,10 +32,9 @@ class Crypt
     public function encrypt(string $plaintext): string
     {
         $timestamp = time();
-        $nonce = Text::random(Text::RANDOM_ALNUM, 16);
+        $nonce = Util::randomStr(16);
 
-        $encrypt = (new Prpcrypt($this->encodingAesKey))
-            ->encrypt($plaintext, $this->appId);
+        $encrypt = $this->prpcrypt->encrypt($plaintext, $this->appId);
 
         $signature = Sha1::sign($encrypt, $this->token, $timestamp, $nonce);
 
@@ -58,12 +55,12 @@ class Crypt
      *    <li>对消息进行解密</li>
      * </ol>
      * @param string $ciphertext
-     * @return string
+     * @return array
      */
-    public function decrypt(string $ciphertext): string
+    public function decrypt(string $ciphertext): array
     {
-        $crypt = new Prpcrypt($this->encodingAesKey);
+        $xmlText = $this->prpcrypt->decrypt($ciphertext);
 
-        return $crypt->decrypt($ciphertext);
+        return XMLParse::extract($xmlText);
     }
 }

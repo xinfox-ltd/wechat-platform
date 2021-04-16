@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace XinFox\WechatPlatform\Exception;
 
-class ComponentVerifyTicketException extends Exception
+class ComponentVerifyTicketException extends WechatPlatformException
 {
     public function __construct()
     {

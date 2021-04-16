@@ -4,7 +4,7 @@ namespace XinFox\WechatPlatform\Api\ThirdPartyPlatform;
 
 use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
 use XinFox\WechatPlatform\Exception;
-use XinFox\WechatPlatform\Http;
+use XinFox\WechatPlatform\HttpClient;
 
 class Oauth2
 {
@@ -36,38 +36,6 @@ class Oauth2
             . "appid={$appId}&redirect_uri={$redirectUri}&response_type=code&scope={$scope}&state={$state}&component_appid={$componentAppId}#wechat_redirect";
     }
 
-    /**
-     * @param string $appId
-     * @param string $code
-     * @param string $state
-     * @return array|null
-     * @throws Exception
-     */
-    public function getAccessTokenByCode(string $appId, string $code, string $state): ?array
-    {
-        $cache = container('cache');
-        $cacheKeyName = "{$appId}_state";
-        if (!$cache->has($cacheKeyName)) {
-            throw new Exception('非法操作:state');
-        }
-
-        if ($cache->get($cacheKeyName) != $state) {
-            throw new Exception('非法操作:state');
-        }
-
-        $componentAppId = $this->componentAppId;
-        $componentAccessToken = ThirdPartyPlatform::getInstance()->getComponentAccessToken();
-
-        $api = "https://api.weixin.qq.com/sns/oauth2/component/access_token?"
-            . "appid={$appId}&code={$code}&grant_type=authorization_code&component_appid={$componentAppId}&component_access_token={$componentAccessToken}";
-
-        $data = Http::getInstance()->get($api);
-
-        $cache->delete($cacheKeyName);
-
-        return $data;
-    }
-
     public function getAccessToken(string $appId): ?string
     {
         $cache = container('cache');
@@ -93,7 +61,7 @@ class Oauth2
         $api = "https://api.weixin.qq.com/sns/oauth2/component/refresh_token?"
             . "appid={$appId}&grant_type=refresh_token&component_appid={$componentAppId}&component_access_token={$componentAccessToken}&refresh_token={$refreshToken}";
 
-        return Http::getInstance()->get($api);
+        return HttpClient::getInstance()->get($api);
     }
 
     /**
@@ -106,6 +74,6 @@ class Oauth2
     {
         $api = "https://api.weixin.qq.com/sns/userinfo?access_token={$accessToken}&openid={$openid}&lang=zh_CN";
 
-        return Http::getInstance()->get($api);
+        return HttpClient::getInstance()->get($api);
     }
 }

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace XinFox\WechatPlatform\Exception;
 
-class InvalidArgumentException extends WechatPlatformException
+class DecryptException extends WechatPlatformException
 {
 
 }
