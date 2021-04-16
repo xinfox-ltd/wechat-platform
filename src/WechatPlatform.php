@@ -214,7 +214,7 @@ class WechatPlatform
             ->post($uri, $data);
 
         $authorization = new Authorization($response);
-        $this - $this->authorizationRepository->save($authorization);
+        $this->authorizationRepository->save($authorization);
 
         return $authorization;
     }

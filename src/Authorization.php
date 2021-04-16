@@ -23,10 +23,22 @@ class Authorization
 
     public function __construct(array $data)
     {
+        $this->data = $data;
+    }
+
+    public function getAppId(): string
+    {
+        return $this->data['authorizer_appid'];
+    }
+
+    public function getAccessToken(): string
+    {
+        return $this->data['authorizer_access_token'];
     }
 
     public function getRefreshToken(): string
     {
+        return $this->data['authorizer_refresh_token'];
     }
 
     /**
@@ -35,5 +47,11 @@ class Authorization
      */
     public function getExpireTime(): int
     {
+        return $this->data['authorizer_appid'];
+    }
+
+    public function getFuncInfo(): array
+    {
+        return $this->data['func_info'];
     }
 }
