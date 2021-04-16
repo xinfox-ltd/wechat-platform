@@ -47,7 +47,7 @@ class Authorization
      */
     public function getExpireTime(): int
     {
-        return time() + $this->data['expires_in'] ?? 0;
+        return $this->data['expire_time'];
     }
 
     public function getFuncInfo(): array

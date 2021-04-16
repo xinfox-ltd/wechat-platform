@@ -213,6 +213,7 @@ class WechatPlatform
         $response = HttpClient::getInstance()
             ->post($uri, $data);
 
+        $response['expire_time'] = time() + $response['expires_in'];
         $authorization = new Authorization($response);
         $this->authorizationRepository->save($authorization);
 
@@ -276,6 +277,7 @@ class WechatPlatform
         $response = HttpClient::getInstance()
             ->post($uri, $data);
 
+        $response['expire_time'] = time() + $response['expires_in'];
         $response['authorizer_appid'] = $authorizerAppId;
 
         return $this->authorizationRepository->save(
