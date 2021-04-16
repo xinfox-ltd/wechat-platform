@@ -232,7 +232,7 @@ class WechatPlatform
      */
     public function getAuthorizerAccessToken(string $authorizerAppId): Authorization
     {
-        $authorization = $this->authorizationRepository->getOneByAuthorizerAppId($authorizerAppId);
+        $authorization = $this->authorizationRepository->findByAppId($authorizerAppId);
         if (!$authorization) {
             throw new AuthorizationNotExistException();
         }
@@ -273,14 +273,13 @@ class WechatPlatform
         ];
 
         $uri = "/cgi-bin/component/api_authorizer_token?component_access_token={$componentAccessToken}";
-        $authorization = new Authorization(
-            HttpClient::getInstance()
-                ->post($uri, $data)
-        );
-        return $this->authorizationRepository->update(
-            $authorization['authorizer_access_token'],
-            (int)$authorization['expires_in'],
-            $authorization['authorizer_refresh_token']
+        $response = HttpClient::getInstance()
+            ->post($uri, $data);
+
+        $response['authorizer_appid'] = $authorizerAppId;
+
+        return $this->authorizationRepository->save(
+            new Authorization($response)
         );
     }
 
