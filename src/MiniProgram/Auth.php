@@ -5,6 +5,7 @@ namespace XinFox\WechatPlatform\MiniProgram;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\SimpleCache\InvalidArgumentException;
 use XinFox\WechatPlatform\AbstractApi;
+use XinFox\WechatPlatform\Entity\MiniProgramSession;
 use XinFox\WechatPlatform\Exception;
 use XinFox\WechatPlatform\HttpClient;
 
@@ -13,13 +14,13 @@ class Auth extends AbstractApi
     /**
      * @param string $appId
      * @param string $jsCode
-     * @return array
+     * @return MiniProgramSession
      * @throws Exception\ApiException
      * @throws Exception\ComponentVerifyTicketException
      * @throws GuzzleException
      * @throws InvalidArgumentException
      */
-    public function code2Session(string $appId, string $jsCode): array
+    public function code2Session(string $appId, string $jsCode): MiniProgramSession
     {
         $componentAccessToken = $this->platform->getComponentAccessToken();
 
@@ -38,21 +39,25 @@ class Auth extends AbstractApi
         $key = $this->createSessionKeyCacheKey($appId, $data['openid']);
         $this->platform->getCache()->set($key, $data['session_key'], 2592000);
 
-        return $data;
+        return new MiniProgramSession($data['openid'], $data['session_key'], $data['unionid'] ?? null);
     }
 
     /**
      * @param string $appId
      * @param string $openId
+     * @param string $sessionKey
      * @return string
-     * @throws InvalidArgumentException|Exception\SessionKeyException
+     * @throws Exception\SessionKeyException
+     * @throws InvalidArgumentException
      */
-    public function getSessionKey(string $appId, string $openId): string
+    public function getSessionKey(string $appId, string $openId, string $sessionKey = ''): string
     {
-        $key = $this->createSessionKeyCacheKey($appId, $openId);
+        if (empty($sessionKey)) {
+            $sessionKey = $this->createSessionKeyCacheKey($appId, $openId);
+        }
         $cache = $this->platform->getCache();
-        if ($cache->has($key)) {
-            return $cache->get($key);
+        if ($cache->has($sessionKey)) {
+            return $cache->get($sessionKey);
         }
 
         throw new Exception\SessionKeyException('小程序登录 SessionKey 失效');
@@ -81,7 +86,7 @@ class Auth extends AbstractApi
         $aesKey = base64_decode($sessionKey);
         $aesIV = base64_decode($iv);
         $aesCipher = base64_decode($encryptedData);
-
+        // 解密
         $result = openssl_decrypt($aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
 
         $json = json_decode($result, true);

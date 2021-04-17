@@ -9,7 +9,7 @@ use XinFox\WechatPlatform\Exception\ApiException;
 
 class HttpClient
 {
-    protected static HttpClient $instance;
+    protected static ?HttpClient $instance = null;
 
     protected Client $client;
 
@@ -18,7 +18,7 @@ class HttpClient
         $this->client = new Client(
             [
                 'base_uri' => 'https://api.weixin.qq.com',
-                'timeout' => 2.0,
+                'timeout' => 5.0,
             ]
         );
     }

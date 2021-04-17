@@ -75,42 +75,46 @@ class WechatPlatform
     /**
      * 生成授权url
      *
-     * @param string $preAuthCode 预授权码
      * @param string $redirectUri 回调 URI
      * @param string $mode 授权方式：wap 点击移动端链接快速授权, scan 授权注册页面扫码授权
      * @param string $bizAppId 指定授权唯一的小程序或公众号
      * @return string
+     * @throws ApiException
+     * @throws ComponentVerifyTicketException
+     * @throws GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function generateAuthUrl(
-        string $preAuthCode,
         string $redirectUri,
         $mode = 'wap',
         string $bizAppId = ''
     ): string {
         $redirectUri = urlencode($redirectUri);
         if ($mode == 'wap') {
-            return $this->generateLinkAuthUrl($preAuthCode, $redirectUri, $bizAppId);
+            return $this->generateLinkAuthUrl($redirectUri, $bizAppId);
         } else {
-            return $this->generateScanAuthUrl($preAuthCode, $redirectUri, $bizAppId);
+            return $this->generateScanAuthUrl($redirectUri, $bizAppId);
         }
     }
 
     /**
      * 生成移动端快速授权链接
-     *
-     * @param string $preAuthCode 预授权码
-     * @param string $redirectUri 回调 URI
-     * @param string $bizAppId 指定授权唯一的小程序或公众号
+     * @param string $redirectUri
+     * @param string $bizAppId
      * @return string
+     * @throws ApiException
+     * @throws ComponentVerifyTicketException
+     * @throws GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function generateLinkAuthUrl(string $preAuthCode, string $redirectUri, string $bizAppId = ''): string
+    public function generateLinkAuthUrl(string $redirectUri, string $bizAppId = ''): string
     {
         $url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=%s'
             . '&pre_auth_code=%s&redirect_uri=%s&auth_type=3&biz_appid=%s';
         return sprintf(
             $url,
             $this->config->getAppId(),
-            $preAuthCode,
+            $this->getPreAuthCode(),
             $redirectUri,
             $bizAppId
         );
