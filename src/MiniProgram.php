@@ -28,7 +28,7 @@ class MiniProgram extends AbstractApi
     public function get(string $name)
     {
         $class = 'XinFox\\WechatPlatform\\MiniProgram\\' . ucfirst($name);
-        if (class_exists($class)) {
+        if (!class_exists($class)) {
             throw new InvalidArgumentException("$class not exists");
         }
 
