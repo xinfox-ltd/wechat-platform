@@ -2,26 +2,27 @@
 
 namespace XinFox\WechatPlatform\MiniProgram;
 
-use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
-use XinFox\WechatPlatform\Exception;
+use XinFox\WechatPlatform\AbstractApi;
 use XinFox\WechatPlatform\HttpClient;
 
-class Config
+class Config extends AbstractApi
 {
-
     /**
      * 设置小程序服务器域名
      *
-     * @param string $authorizerAppid
+     * @param string $authorizerAppId
      * @param string $action
      * @param array $domain
      * @return array
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
-    public function modifyDomain(string $authorizerAppid, string $action, array $domain = [])
+    public function modifyDomain(string $authorizerAppId, string $action, array $domain = []): array
     {
-        $accessToken = ThirdPartyPlatform::getInstance()
-            ->getAuthorizerAccessToken($authorizerAppid);
+        $accessToken = $this->platform->getAuthorizerAccessToken($authorizerAppId);
         $api = 'https://api.weixin.qq.com/wxa/modify_domain?access_token=' . $accessToken;
         $data = [
             'action' => $action,
@@ -33,10 +34,8 @@ class Config
 
         $data = array_merge($data, $domain);
 
-        $data = HttpClient::getInstance()
+        return HttpClient::getInstance()
             ->post($api, $data);
-
-        return $data;
     }
 
     /**
@@ -44,21 +43,22 @@ class Config
      * @param string $action
      * @param string $requestDomain
      * @return array
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function setWebViewDomain(string $authorizerAppId, string $action, string $requestDomain): array
     {
-        $accessToken = ThirdPartyPlatform::getInstance()
-            ->getAuthorizerAccessToken($authorizerAppId);
+        $accessToken = $this->platform->getAuthorizerAccessToken($authorizerAppId);
         $api = 'https://api.weixin.qq.com/wxa/setwebviewdomain?access_token=' . $accessToken;
         $data = [
             'action' => $action,
             'requestdomain' => $requestDomain,
         ];
 
-        $data = HttpClient::getInstance()
+        return HttpClient::getInstance()
             ->post($api, $data);
-
-        return $data;
     }
 }

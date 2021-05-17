@@ -2,28 +2,27 @@
 
 namespace XinFox\WechatPlatform\MiniProgram;
 
-use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
-use XinFox\WechatPlatform\Exception;
+use XinFox\WechatPlatform\AbstractApi;
 use XinFox\WechatPlatform\HttpClient;
 
-class CodeTemplate
+class CodeTemplate extends AbstractApi
 {
     /**
      * 获取草稿箱内的所有临时代码草稿
      *
      * @return array
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
-    public static function getTemplateDraftList()
+    public function getTemplateDraftList(): array
     {
-        $componentAccessToken = ThirdPartyPlatform::getInstance()
-            ->getComponentAccessToken();
-
+        $componentAccessToken = $this->platform->getComponentAccessToken();
         $api = "https://api.weixin.qq.com/wxa/gettemplatedraftlist?access_token={$componentAccessToken}";
-        $resultData = HttpClient::getInstance()
-            ->get($api);
 
-        return $resultData;
+        return HttpClient::getInstance()
+            ->get($api);
 
     }
 
@@ -31,18 +30,18 @@ class CodeTemplate
      * 获取代码模版库中的所有小程序代码模版
      *
      * @return array
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
-    public static function getTemplateList()
+    public function getTemplateList(): array
     {
-        $componentAccessToken = ThirdPartyPlatform::getInstance()
-            ->getComponentAccessToken();
+        $componentAccessToken = $this->platform->getComponentAccessToken();
 
         $api = "https://api.weixin.qq.com/wxa/gettemplatelist?access_token={$componentAccessToken}";
-        $resultData = HttpClient::getInstance()
+        return HttpClient::getInstance()
             ->get($api);
-
-        return $resultData;
 
     }
 
@@ -51,22 +50,21 @@ class CodeTemplate
      *
      * @param mixed $draftId
      * @return array
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
-    public static function addToTemplate($draftId)
+    public function addToTemplate($draftId): array
     {
-        $componentAccessToken = ThirdPartyPlatform::getInstance()
-            ->getComponentAccessToken();
-
+        $componentAccessToken = $this->platform->getComponentAccessToken();;
         $api = "https://api.weixin.qq.com/wxa/addtotemplate?access_token={$componentAccessToken}";
         $data = [
             'draft_id' => $draftId
         ];
 
-        $resultData = HttpClient::getInstance()
+        return HttpClient::getInstance()
             ->post($api, $data);
-
-        return $resultData;
 
     }
 
@@ -75,22 +73,21 @@ class CodeTemplate
      *
      * @param mixed $templateId
      * @return array
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
-    public static function deleteTemplate($templateId)
+    public function deleteTemplate($templateId): array
     {
-        $componentAccessToken = ThirdPartyPlatform::getInstance()
-            ->getComponentAccessToken();
-
+        $componentAccessToken = $this->platform->getComponentAccessToken();;
         $api = "https://api.weixin.qq.com/wxa/deletetemplate?access_token={$componentAccessToken}";
         $data = [
             'template_id' => $templateId
         ];
 
-        $resultData = HttpClient::getInstance()
+        return HttpClient::getInstance()
             ->post($api, $data);
-
-        return $resultData;
 
     }
 }
