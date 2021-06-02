@@ -110,16 +110,12 @@ class Message
 
     public function isSubscribeEvent(): bool
     {
-        return $this->isEvent()
-            ? $this->event == 'subscribe'
-            : false;
+        return $this->isEvent() && $this->event == 'subscribe';
     }
 
     public function isUnsubscribeEvent(): bool
     {
-        return $this->isEvent()
-            ? $this->event == 'unsubscribe'
-            : false;
+        return $this->isEvent() && $this->event == 'unsubscribe';
     }
 
     /**

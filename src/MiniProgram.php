@@ -13,6 +13,10 @@ use XinFox\WechatPlatform\MiniProgram\Auth;
 /**
  * Class MiniProgram
  * @property Auth $auth
+ * @property \XinFox\WechatPlatform\MiniProgram\QrCode $qrCode
+ * @property \XinFox\WechatPlatform\MiniProgram\Code $code
+ * @property \XinFox\WechatPlatform\MiniProgram\CodeTemplate $codeTemplate
+ * @property \XinFox\WechatPlatform\MiniProgram\Config $config
  * @package XinFox\WechatPlatform
  */
 class MiniProgram extends AbstractApi
