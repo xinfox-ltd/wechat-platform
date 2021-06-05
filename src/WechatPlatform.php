@@ -214,11 +214,11 @@ class WechatPlatform
         ];
 
         $uri = "/cgi-bin/component/api_query_auth?component_access_token={$componentAccessToken}";
-        $response = HttpClient::getInstance()
-            ->post($uri, $data);
+        $authorizationInfo = HttpClient::getInstance()
+            ->post($uri, $data)['authorization_info'];
 
-        $response['expire_time'] = time() + $response['expires_in'];
-        $authorization = new Authorization($response);
+        $authorizationInfo['expire_time'] = time() + $authorizationInfo['expires_in'];
+        $authorization = new Authorization($authorizationInfo);
         $this->authorizationRepository->save($authorization);
 
         return $authorization;

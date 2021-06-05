@@ -21,6 +21,9 @@ use XinFox\WechatPlatform\MiniProgram\Auth;
  */
 class MiniProgram extends AbstractApi
 {
+    /**
+     * @throws \XinFox\WechatPlatform\Exception\InvalidArgumentException
+     */
     public function __get($name)
     {
         return $this->get($name);
