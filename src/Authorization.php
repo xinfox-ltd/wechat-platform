@@ -54,4 +54,9 @@ class Authorization
     {
         return $this->data['func_info'];
     }
+
+    public function __toString()
+    {
+        return $this->getAccessToken();
+    }
 }
