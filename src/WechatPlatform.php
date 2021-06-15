@@ -86,7 +86,7 @@ class WechatPlatform
      */
     public function generateAuthUrl(
         string $redirectUri,
-        $mode = 'wap',
+        string $mode = 'wap',
         string $bizAppId = ''
     ): string {
         $redirectUri = urlencode($redirectUri);

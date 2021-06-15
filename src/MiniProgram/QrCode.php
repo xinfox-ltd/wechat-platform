@@ -22,7 +22,7 @@ class QrCode extends AbstractApi
      * @param bool $autoColor 自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调，默认 false
      * @param array $lineColor auto_color 为 false 时生效，使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"} 十进制表示
      * @param bool $isGyaLine 是否需要透明底色，为 true 时，生成透明底色的小程序
-     * @return array
+     * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
@@ -37,7 +37,7 @@ class QrCode extends AbstractApi
         bool $autoColor = true,
         array $lineColor = [],
         bool $isGyaLine = false
-    ): array {
+    ): string {
         $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
         $api = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={$token}";
 

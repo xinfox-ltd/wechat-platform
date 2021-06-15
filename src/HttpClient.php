@@ -35,7 +35,7 @@ class HttpClient
     /**
      * @param $uri
      * @param $data
-     * @return array
+     * @return string|array
      * @throws ApiException|GuzzleException
      */
     public function post($uri, $data): array
@@ -51,11 +51,11 @@ class HttpClient
     /**
      * @param $uri
      * @param array|null $data
-     * @return array
-     * @throws ApiException
-     * @throws GuzzleException
+     * @return string|array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
      */
-    public function get($uri, array $data = null): array
+    public function get($uri, array $data = null)
     {
         $options = $data ? ['query' => $data] : [];
         $body = $this->client
@@ -68,18 +68,19 @@ class HttpClient
     /**
      * @param string $uri
      * @param StreamInterface $stream
-     * @return array
+     * @return string|array
      * @throws ApiException
      */
-    public function getRequestContents(string $uri, StreamInterface $stream): array
+    public function getRequestContents(string $uri, StreamInterface $stream)
     {
-        $json = json_decode($stream->getContents(), true);
-        if (isset($json['errcode']) && $json['errcode'] <> 0) {
+        $content = $stream->getContents();
+        $response = json_decode($content, true);
+        if (isset($response['errcode']) && $response['errcode'] <> 0) {
             throw new ApiException(
-                sprintf("%s 获取失败：[%s][%s]", $uri, $json['errcode'], $json['errmsg'])
+                sprintf("%s 获取失败：[%s][%s]", $uri, $response['errcode'], $response['errmsg'])
             );
         }
 
-        return $json;
+        return $response ?? $content;
     }
 }
