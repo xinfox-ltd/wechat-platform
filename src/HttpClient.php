@@ -38,7 +38,7 @@ class HttpClient
      * @return string|array
      * @throws ApiException|GuzzleException
      */
-    public function post($uri, $data): array
+    public function post($uri, $data)
     {
         $data = is_array($data) ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
         $body = $this->client
