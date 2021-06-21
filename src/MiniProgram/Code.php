@@ -295,6 +295,7 @@ class Code extends AbstractApi
      * 小程序版本回退
      *
      * @param string $authorizerAppId
+     * @param int|null $appVersion
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -302,10 +303,13 @@ class Code extends AbstractApi
      * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
-    public function revertCodeRelease(string $authorizerAppId): array
+    public function revertCodeRelease(string $authorizerAppId, ?int $appVersion): array
     {
         $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
         $api = "https://api.weixin.qq.com/wxa/revertcoderelease?access_token={$token}";
+        if (!empty($appVersion) && $appVersion > 0) {
+            $api .= "&app_version=" . $appVersion;
+        }
 
         return HttpClient::getInstance()
             ->get($api);
