@@ -18,8 +18,10 @@ class Basics extends AbstractApi
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException|\XinFox\WechatPlatform\Exception\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      */
     public function modifyDomain(
+        string $authorizerAppId,
         array $requestDomain,
         array $wsRequestDomain,
         array $uploadDomain,
@@ -30,8 +32,8 @@ class Basics extends AbstractApi
             throw new InvalidArgumentException();
         }
 
-        $componentAccessToken = $this->platform->getComponentAccessToken();;
-        $api = "https://api.weixin.qq.com/wxa/modify_domain?access_token={$componentAccessToken}";
+        $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
+        $api = "https://api.weixin.qq.com/wxa/modify_domain?access_token={$token}";
         $data = [
             "action" => $action,
             "requestdomain" => $requestDomain,
