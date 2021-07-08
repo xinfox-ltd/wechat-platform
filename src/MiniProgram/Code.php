@@ -377,4 +377,47 @@ class Code extends AbstractApi
         return HttpClient::getInstance()
             ->post($api, $data);
     }
+
+    /**
+     * 查询服务商的当月提审限额（quota）和加急次数
+     * @param string $authorizerAppId
+     * @return array|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
+     */
+    public function queryQuota(string $authorizerAppId)
+    {
+        $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
+        $api = "https://api.weixin.qq.com/wxa/queryquota?access_token={$token}";
+        $data = [];
+
+        return HttpClient::getInstance()
+            ->post($api, $data);
+    }
+
+    /**
+     * 加急审核申请
+     * @param string $authorizerAppId
+     * @param int $auditId
+     * @return array|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
+     */
+    public function speedupAudit(string $authorizerAppId, int $auditId)
+    {
+        $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
+        $api = "https://api.weixin.qq.com/wxa/speedupaudit?access_token={$token}";
+        $data = [
+            'auditid' => $auditId
+        ];
+
+        return HttpClient::getInstance()
+            ->post($api, $data);
+    }
 }

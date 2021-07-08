@@ -455,4 +455,21 @@ class WechatPlatform
     {
         $this->cache->set('component_verify_ticket', $componentVerifyTicket, 3600 * 11);
     }
+
+    /**
+     * 启动ticket推送服务
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     */
+    public function apiStartPushTicket()
+    {
+        $data = [
+            'component_appid' => $this->config->getAppId(),
+            'component_secret' => $this->config->getAppSecret(),
+        ];
+
+        $uri = "/cgi-bin/component/api_start_push_ticket";
+        return HttpClient::getInstance()
+            ->post($uri, $data);
+    }
 }
