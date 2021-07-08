@@ -17,6 +17,7 @@ use XinFox\WechatPlatform\MiniProgram\Auth;
  * @property \XinFox\WechatPlatform\MiniProgram\Code $code
  * @property \XinFox\WechatPlatform\MiniProgram\CodeTemplate $codeTemplate
  * @property \XinFox\WechatPlatform\MiniProgram\Config $config
+ * @property \XinFox\WechatPlatform\MiniProgram\Basics $basics
  * @package XinFox\WechatPlatform
  */
 class MiniProgram extends AbstractApi
