@@ -70,7 +70,7 @@ class Crypt
      *@param sTimeStamp: 时间戳，对应URL参数的timestamp
      *@param sNonce: 随机串，对应URL参数的nonce
      *@param sEchoStr: 随机串，对应URL参数的echostr
-     *@param sReplyEchoStr: 解密之后的echostr，当return返回0时有效
+     *@param sReplyEchoStr: 解密之后的echostr，当return返回 0 时有效
      *@return：成功0，失败返回对应的错误码
      */
     public function verifyURL($sMsgSignature, $sTimeStamp, $sNonce, $sEchoStr, &$sReplyEchoStr)
