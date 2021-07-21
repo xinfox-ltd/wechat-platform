@@ -75,23 +75,15 @@ class Crypt
      */
     public function verifyURL($sMsgSignature, $sTimeStamp, $sNonce, $sEchoStr, &$sReplyEchoStr)
     {
-        $array = Sha1::sign($this->token, $sTimeStamp, $sNonce, $sEchoStr);
-        $ret = $array[0];
+        $signature = Sha1::sign($sEchoStr, $this->token, $sTimeStamp, $sNonce);
 
-        if ($ret != 0) {
-            return $ret;
-        }
-
-        $signature = $array[1];
         if ($signature != $sMsgSignature) {
             throw new \Exception("签名错误");
         }
 
         $result = $this->prpcrypt->decrypt($sEchoStr, $this->appId);
-        if ($result[0] != 0) {
-            return $result[0];
-        }
-        $sReplyEchoStr = $result[1];
+
+        $sReplyEchoStr = $result;
 
         return 0;
     }
