@@ -54,6 +54,12 @@ class WechatPlatform
         return $this->authorizationRepository;
     }
 
+    public function receivePush($xmlText): Message
+    {
+        $xml = XMLParse::extract($xmlText);
+        return new Message($this->crypt->decrypt($xml['Encrypt']));
+    }
+
     /**
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */

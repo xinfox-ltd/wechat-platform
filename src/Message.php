@@ -2,8 +2,6 @@
 
 namespace XinFox\WechatPlatform;
 
-use DOMDocument;
-
 /**
  * Class Message
  * @property string $msgId
@@ -21,34 +19,10 @@ class Message
 
     /**
      * Message constructor.
-     * @throws Exception
      */
-    public function __construct()
+    public function __construct($plaintext)
     {
-        $xmltext = file_get_contents("php://input");
-        container('logger')->debug($xmltext);
-
-        $xml = new DOMDocument();
-        $xml->loadXML($xmltext);
-        $encryptElement = $xml->getElementsByTagName('Encrypt');
-        $toUserNameElement = $xml->getElementsByTagName('ToUserName');
-
-        if ($encryptElement->count() == 0) {
-            throw new Exception('微信平台通知内容解析失败');
-        }
-
-        $ciphertext = $encryptElement->item(0)->nodeValue;
-        container('logger')->debug($ciphertext);
-        if ($toUserNameElement->count() > 0) {
-            $tousername = $toUserNameElement->item(0)->nodeValue;
-        }
-
-        $weixinCrypt = new Crypt();
-
-        $plaintext = $weixinCrypt->decrypt($ciphertext);
-        $this->data = XMLParse::extract($plaintext);
-
-        container('logger')->debug(var_export($this->data, true));
+        $this->data = $plaintext;
     }
 
     /**
@@ -118,10 +92,14 @@ class Message
         return $this->isEvent() && $this->event == 'unsubscribe';
     }
 
+    public function isWeAppAuditEvent(): bool
+    {
+        return $this->isEvent() && in_array($this->event, ['weapp_audit_success', 'weapp_audit_fail', 'weapp_audit_delay']);
+    }
+
     /**
      * @param $name
      * @return mixed
-     * @throws Exception
      */
     public function __get($name)
     {
@@ -130,7 +108,7 @@ class Message
             return $this->data[$key];
         }
 
-        throw new Exception(
+        throw new \InvalidArgumentException(
             sprintf("%s不存在，当前消息类型为[%s]", $key, $this->getMsgType())
         );
     }
