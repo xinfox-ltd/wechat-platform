@@ -13,6 +13,7 @@ use XinFox\WechatPlatform\Exception\InvalidArgumentException;
  * Class ThirdPartyPlatform
  * @property Crypt $crypt
  * @property MiniProgram $miniProgram
+ * @property OpenPlatform $openPlatform
  * @package XinFox\WechatPlatform
  */
 class WechatPlatform
