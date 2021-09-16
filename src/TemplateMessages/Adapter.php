@@ -18,42 +18,15 @@ abstract class Adapter
 
     protected $miniprogram;
 
-    public function toJson()
+    public function toArray()
     {
-        $array = [
+        return [
             'touser'      => $this->touser,
             'template_id' => $this->id,
             'url'         => $this->url,
             'miniprogram' => $this->miniprogram,
             'data'        => $this->getOptions(),
         ];
-
-        return json_encode($array);
-    }
-
-    /**
-     * @return bool
-     */
-    public function push()
-    {
-        $config = container('config')->path('vendor.weixin.platform');
-
-        $token = ThirdPartyPlatform::getInstance()
-            ->getAuthorizerAccessToken($config->appid);
-
-        $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={$token}";
-
-        $pushJson = $this->toJson();
-
-        $client = new Client();
-        $response = $client->post($url, ['body' => json_encode($pushJson)]);
-
-        $result = json_decode($response->body);
-        if ($result->errcode != 0) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -90,6 +63,7 @@ abstract class Adapter
     public function setTouser($touser)
     {
         $this->touser = $touser;
+        return $this;
     }
 
     /**
@@ -99,6 +73,7 @@ abstract class Adapter
     public function setUrl($url)
     {
         $this->url = $url;
+        return $this;
     }
 
     /*
@@ -107,24 +82,6 @@ abstract class Adapter
     public function setMiniprogram($miniprogram)
     {
         $this->miniprogram = $miniprogram;
-    }
-
-    /**
-     * 截取字符串
-     *
-     * $str     字符串
-     * $len     截取长度
-     * $suffix  代替符号
-     *
-     * @return string
-     */
-    protected function intercept($str, $len, $suffix = "...")
-    {
-        if (mb_strlen($str) > $len) {
-            $str = function_exists('mb_substr') ? mb_substr($str, 0, $len, "utf-8") : substr($str, 0, $len);
-            $str = $str . $suffix;
-        }
-
-        return $str;
+        return $this;
     }
 }

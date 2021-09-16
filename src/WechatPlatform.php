@@ -479,4 +479,13 @@ class WechatPlatform
         return HttpClient::getInstance()
             ->post($uri, $data);
     }
+
+    public function sendMessage($pushJson)
+    {
+        $token = $this->wechat->getAuthorizerAccessToken($this->config->getAppId());
+
+        $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={$token}";
+
+        return HttpClient::getInstance()->post($url, $pushJson);
+    }
 }

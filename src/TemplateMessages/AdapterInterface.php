@@ -7,6 +7,6 @@ namespace XinFox\WechatPlatform\TemplateMessages;
  */
 interface AdapterInterface
 {
-    public function toJson();
+    public function toArray();
     public function getOptions();
 }
