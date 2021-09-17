@@ -1,15 +1,15 @@
 <?php
+
 namespace XinFox\WechatPlatform\TemplateMessages;
 
-use GuzzleHttp\Client;
-use XinFox\WechatPlatform\Api\ThirdPartyPlatform;
-
 /**
- * Class Adapter
+ * Class AbstractTemplateMessage
  * @package XinFox\WechatPlatform\TemplateMessages
  */
-abstract class Adapter
+abstract class AbstractTemplateMessage implements TemplateMessageInterface
 {
+    protected $appid;
+
     protected $id;
 
     protected $touser;
@@ -17,6 +17,11 @@ abstract class Adapter
     protected $url;
 
     protected $miniprogram;
+
+    public function __construct($appid)
+    {
+        $this->appid = $appid;
+    }
 
     public function toArray()
     {
@@ -27,6 +32,11 @@ abstract class Adapter
             'miniprogram' => $this->miniprogram,
             'data'        => $this->getOptions(),
         ];
+    }
+
+    public function getAppId(): string
+    {
+        return $this->appid;
     }
 
     /**

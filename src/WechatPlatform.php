@@ -14,6 +14,7 @@ use XinFox\WechatPlatform\Exception\InvalidArgumentException;
  * @property Crypt $crypt
  * @property MiniProgram $miniProgram
  * @property OpenPlatform $openPlatform
+ * @property TemplateMessage $templateMessage
  * @package XinFox\WechatPlatform
  */
 class WechatPlatform
@@ -478,13 +479,5 @@ class WechatPlatform
         $uri = "/cgi-bin/component/api_start_push_ticket";
         return HttpClient::getInstance()
             ->post($uri, $data);
-    }
-
-    public function sendMessage($options)
-    {
-        $token = $this->getAuthorizerAccessToken($this->config->getAppId());
-        $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={$token}";
-
-        return HttpClient::getInstance()->post($url, $options);
     }
 }

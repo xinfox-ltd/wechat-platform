@@ -2,11 +2,12 @@
 namespace XinFox\WechatPlatform\TemplateMessages;
 
 /**
- * Interface AdapterInterface
+ * Interface TemplateMessageInterface
  * @package XinFox\WechatPlatform\TemplateMessages
  */
-interface AdapterInterface
+interface TemplateMessageInterface
 {
     public function toArray();
     public function getOptions();
+    public function getAppId(): string;
 }
