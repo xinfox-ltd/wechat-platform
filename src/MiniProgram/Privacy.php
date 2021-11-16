@@ -38,23 +38,6 @@ class Privacy extends AbstractApi
             throw new \Exception('owner_setting参数缺少notice_method字段');
         }
 
-        // setting_list 结构体
-        // https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/privacy_config/set_privacy_setting.html#setting-list-%E7%BB%93%E6%9E%84%E4%BD%93
-        if (!empty($settingList)) {
-
-            // privacy_key 可选值
-            // https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/privacy_config/set_privacy_setting.html#privacy-key-%E5%8F%AF%E9%80%89%E5%80%BC%E5%A6%82%E4%B8%8B
-            if (!isset($settingList['privacy_key']) || empty($settingList['privacy_key'])) {
-                throw new \Exception('setting_list参数缺少privacy_key字段');
-            }
-
-            // 请填写收集该信息的用途。例如privacy_key=Location（位置信息），那么privacy_text则填写收集位置信息的用途。无需再带上“为了”或者“用于”这些字眼，小程序端的显示格式是为了xxx，因此开发者只需要直接填写用途即可。
-            if (!isset($settingList['privacy_text']) || empty($settingList['privacy_text'])) {
-                throw new \Exception('setting_list参数缺少privacy_text字段');
-            }
-        }
-
-
         $accessToken = $this->platform->getAuthorizerAccessToken($authorizerAppId);
         $api = 'https://api.weixin.qq.com/cgi-bin/component/setprivacysetting?access_token=' . $accessToken;
         $data = [
