@@ -97,6 +97,11 @@ class Message
         return $this->isEvent() && in_array($this->event, ['weapp_audit_success', 'weapp_audit_fail', 'weapp_audit_delay']);
     }
 
+    public function isWxaPrivacyApplyEvent(): bool
+    {
+        return $this->isEvent() && $this->event == 'wxa_privacy_apply';
+    }
+
     /**
      * @param $name
      * @return mixed
