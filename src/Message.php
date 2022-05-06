@@ -102,6 +102,11 @@ class Message
         return $this->isEvent() && $this->event == 'wxa_privacy_apply';
     }
 
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
     /**
      * @param $name
      * @return mixed
