@@ -3,6 +3,7 @@
 /**
  * [XinFox System] Copyright (c) 2011 - 2021 XINFOX.CN
  */
+
 declare(strict_types=1);
 
 namespace XinFox\WechatPlatform;
@@ -30,9 +31,19 @@ class Authorizer
         $this->data = $data;
     }
 
+    public function getAuthorizerInfo()
+    {
+        return $this->data['authorizer_info'];
+    }
+
+    public function getAuthorizationInfo()
+    {
+        return $this->data['authorization_info'];
+    }
+
     public function geHeadImg(): string
     {
-        return $this->data['head_img'];
+        return $this->data['authorizer_info']['head_img'];
     }
 
     public function getServiceTypeInfo(): array
