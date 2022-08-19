@@ -95,19 +95,22 @@ class WechatPlatform
     public function generateAuthUrl(
         string $redirectUri,
         string $mode = 'wap',
+        int $authType = 3,
         string $bizAppId = ''
     ): string {
         $redirectUri = urlencode($redirectUri);
         if ($mode == 'wap') {
-            return $this->generateLinkAuthUrl($redirectUri, $bizAppId);
-        } else {
-            return $this->generateScanAuthUrl($redirectUri, $bizAppId);
+            return $this->generateH5AuthUrl($redirectUri, $authType, $bizAppId);
         }
+
+        return $this->generateLinkAuthUrl($redirectUri, $authType, $bizAppId);
     }
 
     /**
-     * 生成移动端快速授权链接
+     * PC版授权链接
+     * 
      * @param string $redirectUri
+     * @param string $authType 1 表示手机端仅展示公众号；2 表示仅展示小程序，3 表示公众号和小程序都展示。如果为未指定，则默认小程序和公众号都展示。
      * @param string $bizAppId
      * @return string
      * @throws ApiException
@@ -115,36 +118,38 @@ class WechatPlatform
      * @throws GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function generateLinkAuthUrl(string $redirectUri, string $bizAppId = ''): string
+    public function generateLinkAuthUrl(string $redirectUri, int $authType = 3, string $bizAppId = ''): string
     {
         $url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=%s'
-            . '&pre_auth_code=%s&redirect_uri=%s&auth_type=3&biz_appid=%s';
+            . '&pre_auth_code=%s&redirect_uri=%s&auth_type=%d&biz_appid=%s';
         return sprintf(
             $url,
             $this->config->getAppId(),
             $this->getPreAuthCode(),
             $redirectUri,
+            $authType,
             $bizAppId
         );
     }
 
     /**
-     * 生成授权扫码授权注册页面链接
+     * H5版授权注册页面链接
      *
-     * @param string $preAuthCode 预授权码
      * @param string $redirectUri 回调 URI
+     * @param string $authType 1 表示手机端仅展示公众号；2 表示仅展示小程序，3 表示公众号和小程序都展示。如果为未指定，则默认小程序和公众号都展示。
      * @param string $bizAppId 指定授权唯一的小程序或公众号
      * @return string
      */
-    public function generateScanAuthUrl(string $preAuthCode, string $redirectUri, string $bizAppId = ''): string
+    public function generateH5AuthUrl(string $redirectUri, int $authType = 3, string $bizAppId = ''): string
     {
-        $url = 'https://mp.weixin.qq.com/safe/bindcomponent?action=bindcomponent&no_scan=1&component_appid=%s'
-            . '&pre_auth_code=%s&redirect_uri=%s&auth_type=3&biz_appid=%s#wechat_redirect';
+        $url = 'https://open.weixin.qq.com/wxaopen/safe/bindcomponent?action=bindcomponent&no_scan=1&component_appid=%s'
+            . '&pre_auth_code=%s&redirect_uri=%s&auth_type=%d&biz_appid=%s#wechat_redirect';
         return sprintf(
             $url,
             $this->config->getAppId(),
-            $preAuthCode,
+            $this->getPreAuthCode(),
             $redirectUri,
+            $authType,
             $bizAppId
         );
     }
