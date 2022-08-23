@@ -63,7 +63,11 @@ class WechatPlatform
     }
 
     /**
+     * @param string|null $xmlText
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
      */
     public function receiveAuthEventPush(string $xmlText = null): array
     {
@@ -75,6 +79,7 @@ class WechatPlatform
 
         if ($data['InfoType'] == 'component_verify_ticket') {
             $this->setComponentVerifyTicket($data['ComponentVerifyTicket']);
+            $this->renewComponentAccessToken($data['ComponentVerifyTicket']);
         }
 
         return $data;
@@ -85,12 +90,13 @@ class WechatPlatform
      *
      * @param string $redirectUri 回调 URI
      * @param string $mode 授权方式：wap 点击移动端链接快速授权, scan 授权注册页面扫码授权
+     * @param int $authType
      * @param string $bizAppId 指定授权唯一的小程序或公众号
      * @return string
-     * @throws ApiException
-     * @throws ComponentVerifyTicketException
-     * @throws GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function generateAuthUrl(
         string $redirectUri,
@@ -108,15 +114,15 @@ class WechatPlatform
 
     /**
      * PC版授权链接
-     * 
+     *
      * @param string $redirectUri
-     * @param string $authType 1 表示手机端仅展示公众号；2 表示仅展示小程序，3 表示公众号和小程序都展示。如果为未指定，则默认小程序和公众号都展示。
+     * @param int $authType 1 表示手机端仅展示公众号；2 表示仅展示小程序，3 表示公众号和小程序都展示。如果为未指定，则默认小程序和公众号都展示。
      * @param string $bizAppId
      * @return string
-     * @throws ApiException
-     * @throws ComponentVerifyTicketException
-     * @throws GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function generateLinkAuthUrl(string $redirectUri, int $authType = 3, string $bizAppId = ''): string
     {
@@ -136,9 +142,13 @@ class WechatPlatform
      * H5版授权注册页面链接
      *
      * @param string $redirectUri 回调 URI
-     * @param string $authType 1 表示手机端仅展示公众号；2 表示仅展示小程序，3 表示公众号和小程序都展示。如果为未指定，则默认小程序和公众号都展示。
+     * @param int $authType 1 表示手机端仅展示公众号；2 表示仅展示小程序，3 表示公众号和小程序都展示。如果为未指定，则默认小程序和公众号都展示。
      * @param string $bizAppId 指定授权唯一的小程序或公众号
      * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function generateH5AuthUrl(string $redirectUri, int $authType = 3, string $bizAppId = ''): string
     {
@@ -155,33 +165,47 @@ class WechatPlatform
     }
 
     /**
+     * @param string|null $componentVerifyTicket
+     * @return mixed|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws GuzzleException
-     * @throws Exception\ApiException|ComponentVerifyTicketException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function getComponentAccessToken(string $componentVerifyTicket = null)
     {
         if ($this->cache->has('component_access_token')) {
             return $this->cache->get('component_access_token');
-        } else {
-            $componentVerifyTicket = $componentVerifyTicket ?? $this->getComponentVerifyTicket();
-
-            $data = [
-                'component_appid' => $this->config->getAppId(),
-                'component_appsecret' => $this->config->getAppSecret(),
-                'component_verify_ticket' => $componentVerifyTicket,
-            ];
-
-            $response = HttpClient::getInstance()->post('/cgi-bin/component/api_component_token', $data);
-
-            $this->cache->set(
-                'component_access_token',
-                $response['component_access_token'],
-                $response['expires_in'] - 120
-            );
-
-            return $response['component_access_token'];
         }
+
+        $componentVerifyTicket = $componentVerifyTicket ?? $this->getComponentVerifyTicket();
+        return $this->renewComponentAccessToken($componentVerifyTicket);
+    }
+
+    /**
+     * @param string $componentVerifyTicket
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \XinFox\WechatPlatform\Exception\ApiException
+     */
+    public function renewComponentAccessToken(string $componentVerifyTicket): string
+    {
+        $data = [
+            'component_appid' => $this->config->getAppId(),
+            'component_appsecret' => $this->config->getAppSecret(),
+            'component_verify_ticket' => $componentVerifyTicket,
+        ];
+
+        $response = HttpClient::getInstance()->post('/cgi-bin/component/api_component_token', $data);
+
+        $this->cache->set(
+            'component_access_token',
+            $response['component_access_token'],
+            $response['expires_in'] - 120
+        );
+
+        return $response['component_access_token'];
     }
 
     /**
@@ -242,7 +266,6 @@ class WechatPlatform
      *
      * @param string $authorizerAppId
      * @return mixed
-     * @throws AuthorizationNotExistException
      * @throws ComponentVerifyTicketException
      * @throws Exception\ApiException
      * @throws GuzzleException
@@ -251,9 +274,6 @@ class WechatPlatform
     public function getAuthorizerAccessToken(string $authorizerAppId): Authorization
     {
         $authorization = $this->authorizationRepository->findByAppId($authorizerAppId);
-        if (!$authorization) {
-            throw new AuthorizationNotExistException();
-        }
 
         $time = time();
         if ($authorization->getExpireTime() < $time || $authorization->getExpireTime() - $time < 60) {
