@@ -65,9 +65,7 @@ class WechatPlatform
     /**
      * @param string|null $xmlText
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \XinFox\WechatPlatform\Exception\ApiException
      */
     public function receiveAuthEventPush(string $xmlText = null): array
     {
@@ -79,7 +77,7 @@ class WechatPlatform
 
         if ($data['InfoType'] == 'component_verify_ticket') {
             $this->setComponentVerifyTicket($data['ComponentVerifyTicket']);
-            $this->renewComponentAccessToken($data['ComponentVerifyTicket']);
+            //$this->renewComponentAccessToken($data['ComponentVerifyTicket']);
         }
 
         return $data;
@@ -342,7 +340,7 @@ class WechatPlatform
             'authorizer_appid' => $authorizerAppId,
         ];
 
-        $uri = "/cgi-bin/component/api_get_authorizer_info?component_access_token=" . $componentAccessToken;
+        $uri = "/cgi-bin/component/api_get_authorizer_info?component_access_token=$componentAccessToken";
         $response = HttpClient::getInstance()
             ->post($uri, $data);
 
