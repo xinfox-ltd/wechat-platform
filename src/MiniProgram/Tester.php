@@ -26,7 +26,7 @@ class Tester extends AbstractApi
     public function bind(string $authorizerAppId, string $wechatId)
     {
         $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
-        $api = "/wxa/unbind_tester?access_token={$token}";
+        $api = "/wxa/bind_tester?access_token={$token}";
         $data = [
             "wechatid" => $wechatId
         ];
