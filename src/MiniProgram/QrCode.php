@@ -20,7 +20,6 @@ class QrCode extends AbstractApi
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
-     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function qrcodeJumpAdd(string $authorizerAppId): array
@@ -51,7 +50,6 @@ class QrCode extends AbstractApi
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
-     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function qrcodeJumpGet(string $authorizerAppId): array
@@ -71,7 +69,6 @@ class QrCode extends AbstractApi
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
-     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function qrcodeJumpDownload(string $authorizerAppId): array
@@ -92,7 +89,6 @@ class QrCode extends AbstractApi
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
-     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function qrcodeJumpDelete(string $authorizerAppId, string $prefix): array
@@ -116,7 +112,6 @@ class QrCode extends AbstractApi
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
-     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function qrcodeJumpPublish(string $authorizerAppId, string $prefix): array
@@ -145,7 +140,6 @@ class QrCode extends AbstractApi
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
-     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
     public function getWxACodeUnLimit(
