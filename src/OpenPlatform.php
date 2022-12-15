@@ -20,7 +20,6 @@ class OpenPlatform extends AbstractApi
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \XinFox\WechatPlatform\Exception\AuthorizationNotExistException
      */
     public function create(string $authorizerAppId)
     {

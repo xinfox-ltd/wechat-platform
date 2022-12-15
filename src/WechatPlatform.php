@@ -15,6 +15,7 @@ use XinFox\WechatPlatform\Exception\InvalidArgumentException;
  * @property MiniProgram $miniProgram
  * @property OpenPlatform $openPlatform
  * @property TemplateMessage $templateMessage
+ * @property SubscribeMessage $subscribeMessage
  * @package XinFox\WechatPlatform
  */
 class WechatPlatform
