@@ -52,18 +52,24 @@ class TemplateMessage extends AbstractApi
      * 添加模板
      * @param string $authorizerAppId
      * @param string $templateIdShort
+     * @param array $keywordNameList
      * @return array|string
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \XinFox\WechatPlatform\Exception\ApiException
      * @throws \XinFox\WechatPlatform\Exception\ComponentVerifyTicketException
      */
-    public function addTemplate(string $authorizerAppId, string $templateIdShort)
+    public function addTemplate(string $authorizerAppId, string $templateIdShort, array $keywordNameList = [])
     {
         $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
         $uri = '/cgi-bin/template/api_add_template?access_token=' . $token;
 
-        return HttpClient::getInstance()->post($uri, ['template_id_short' => $templateIdShort]);
+        $data = ['template_id_short' => $templateIdShort];
+        if (!empty($keywordNameList)) {
+            $data['keyword_name_list'] = $keywordNameList;
+        }
+
+        return HttpClient::getInstance()->post($uri, $data);
     }
 
     /**
