@@ -420,4 +420,17 @@ class Code extends AbstractApi
         return HttpClient::getInstance()
             ->post($api, $data);
     }
+
+    /**
+     * 获取隐私接口检测结果
+     * @param string $authorizerAppId
+     * @return array|string
+     */
+    public function getCodePrivacyInfo(string $authorizerAppId)
+    {
+        $accessToken = $this->platform->getAuthorizerAccessToken($authorizerAppId);
+        $api = 'https://api.weixin.qq.com/wxa/security/get_code_privacy_info?access_token=' . $accessToken;
+        return HttpClient::getInstance()
+            ->get($api);
+    }
 }
