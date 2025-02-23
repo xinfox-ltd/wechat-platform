@@ -3,6 +3,7 @@
 /**
  * [XinFox System] Copyright (c) 2011 - 2021 XINFOX.CN
  */
+
 declare(strict_types=1);
 
 namespace XinFox\WechatPlatform\MiniProgram;
@@ -136,6 +137,7 @@ class QrCode extends AbstractApi
      * @param bool $autoColor 自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调，默认 false
      * @param array $lineColor auto_color 为 false 时生效，使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"} 十进制表示
      * @param bool $isGyaLine 是否需要透明底色，为 true 时，生成透明底色的小程序
+     * @param array $options 其他参数
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -149,7 +151,8 @@ class QrCode extends AbstractApi
         int $width = 430,
         bool $autoColor = true,
         array $lineColor = [],
-        bool $isGyaLine = false
+        bool $isGyaLine = false,
+        array $options = []
     ): string {
         $token = $this->platform->getAuthorizerAccessToken($authorizerAppId);
         $api = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={$token}";
@@ -168,6 +171,8 @@ class QrCode extends AbstractApi
             $data['auto_color'] = true;
             $data['line_color'] = json_encode($lineColor);
         }
+
+        $data = array_merge($data, $options);
 
         return HttpClient::getInstance()
             ->post($api, $data);
